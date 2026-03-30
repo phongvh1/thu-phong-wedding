@@ -27,6 +27,109 @@
       overflow-x: hidden;
     }
 
+    /* ══ WELCOME OVERLAY ══ */
+    #welcome-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(20, 14, 8, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease;
+    }
+    #welcome-overlay.hiding {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .welcome-card {
+      text-align: center;
+      padding: 60px 48px;
+      max-width: 420px;
+      width: 90%;
+      border: 1px solid rgba(184,151,90,0.4);
+      border-radius: 4px;
+      position: relative;
+    }
+    .welcome-card::before,
+    .welcome-card::after {
+      content: '✦';
+      position: absolute;
+      font-size: 10px;
+      color: var(--gold-light);
+      opacity: 0.6;
+    }
+    .welcome-card::before { top: 18px; left: 18px; }
+    .welcome-card::after  { bottom: 18px; right: 18px; }
+
+    .wc-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 11px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 28px;
+      opacity: 0.8;
+    }
+    .wc-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 8vw, 54px);
+      font-weight: 300;
+      color: #fdf8f0;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .wc-amp {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold-light);
+      display: block;
+      font-size: 0.7em;
+      margin: 2px 0;
+    }
+    .wc-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      color: rgba(253,248,240,0.45);
+      margin: 20px 0 36px;
+    }
+    .wc-line {
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 0 auto 36px;
+    }
+    /* NÚT NÀY kích hoạt audio.play() trực tiếp — KHÔNG dùng setTimeout hay wrapper */
+    #btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--cream);
+      border: none;
+      padding: 18px 44px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: opacity 0.3s, transform 0.2s;
+    }
+    #btn-enter:hover  { opacity: 0.88; transform: translateY(-2px); }
+    #btn-enter:active { transform: translateY(0); }
+    #btn-enter svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .wc-hint {
+      margin-top: 18px;
+      font-size: 13px;
+      color: rgba(253,248,240,0.25);
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.05em;
+    }
+
     /* ── PETALS ── */
     .petal-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .petal {
@@ -202,44 +305,23 @@
 
     /* ── GALLERY ── */
     .gallery-wrap {
-      overflow-x: auto;
-      overflow-y: hidden;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      padding: 32px 20px 48px;
-      cursor: grab;
-      user-select: none;
+      overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch; padding: 32px 20px 48px;
+      cursor: grab; user-select: none;
     }
     .gallery-wrap:active { cursor: grabbing; }
     .gallery-wrap::-webkit-scrollbar { display: none; }
-    .gallery-strip {
-      display: flex;
-      gap: 16px;
-      width: max-content;
-      align-items: center;
-    }
+    .gallery-strip { display: flex; gap: 16px; width: max-content; align-items: center; }
     .gallery-item {
-      flex: 0 0 260px;
-      height: 340px;
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--blush);
-      box-shadow: 0 8px 28px rgba(44,33,22,0.13);
+      flex: 0 0 260px; height: 340px; border-radius: 6px; overflow: hidden;
+      background: var(--blush); box-shadow: 0 8px 28px rgba(44,33,22,0.13);
       transition: transform 0.35s ease, box-shadow 0.35s ease;
     }
     .gallery-item:nth-child(odd)        { transform: translateY(-12px); }
     .gallery-item:nth-child(even)       { transform: translateY(12px); }
     .gallery-item:nth-child(odd):hover  { transform: translateY(-20px); box-shadow: 0 20px 44px rgba(44,33,22,0.2); }
     .gallery-item:nth-child(even):hover { transform: translateY(4px);   box-shadow: 0 20px 44px rgba(44,33,22,0.2); }
-    .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      pointer-events: none;
-      transition: transform 0.5s ease;
-    }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; pointer-events: none; transition: transform 0.5s ease; }
     .gallery-item:hover img { transform: scale(1.06); }
 
     /* ── RSVP ── */
@@ -252,16 +334,12 @@
     .rsvp-box::after  { bottom: 20px; right: 20px; }
     .rsvp-field { width: 100%; margin-bottom: 20px; }
     .rsvp-field label { display: block; font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; text-align: left; }
-    .rsvp-field input,
-    .rsvp-field select,
-    .rsvp-field textarea {
+    .rsvp-field input, .rsvp-field select, .rsvp-field textarea {
       width: 100%; background: var(--cream); border: 1px solid rgba(184,151,90,0.25); border-radius: 2px;
       padding: 14px 18px; font-family: 'EB Garamond', serif; font-size: 16px; color: var(--text);
       outline: none; transition: border-color 0.3s;
     }
-    .rsvp-field input:focus,
-    .rsvp-field select:focus,
-    .rsvp-field textarea:focus { border-color: var(--gold); }
+    .rsvp-field input:focus, .rsvp-field select:focus, .rsvp-field textarea:focus { border-color: var(--gold); }
     .rsvp-field textarea { resize: none; height: 90px; }
     .btn-submit {
       width: 100%; background: linear-gradient(135deg, var(--gold-dark), var(--gold));
@@ -291,59 +369,26 @@
 
     /* ── MUSIC BUTTON ── */
     #music-btn {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 9999;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
+      position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+      width: 52px; height: 52px; border-radius: 50%;
       background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(184,151,90,0.45);
-      transition: box-shadow 0.3s;
-      border: none;
-      outline: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(184,151,90,0.45);
+      transition: box-shadow 0.3s; border: none; outline: none;
     }
-    #music-btn:hover {
-      box-shadow: 0 6px 30px rgba(184,151,90,0.65);
-    }
-    #music-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: #fdf8f0;
-      transition: opacity 0.3s;
-    }
-    #music-btn.spinning {
-      animation: spinBtn 8s linear infinite;
-    }
-    @keyframes spinBtn {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    /* Tooltip */
+    #music-btn:hover { box-shadow: 0 6px 30px rgba(184,151,90,0.65); }
+    #music-btn svg { width: 22px; height: 22px; }
+    #music-btn.spinning { animation: spinBtn 8s linear infinite; }
+    @keyframes spinBtn { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     #music-btn::after {
-      content: attr(data-tip);
-      position: absolute;
-      right: 60px;
-      background: rgba(44,33,22,0.82);
-      color: #fdf8f0;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 13px;
-      letter-spacing: 0.08em;
-      padding: 6px 12px;
-      border-radius: 3px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
+      content: attr(data-tip); position: absolute; right: 60px;
+      background: rgba(44,33,22,0.82); color: #fdf8f0;
+      font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.08em;
+      padding: 6px 12px; border-radius: 3px; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
     #music-btn:hover::after { opacity: 1; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       .rsvp-box { padding: 36px 24px; }
       .gallery-item { flex: 0 0 200px; height: 260px; }
@@ -356,32 +401,48 @@
       .tl-item:nth-child(odd) .tl-empty,
       .tl-item:nth-child(even) .tl-empty   { display: none; }
       #music-btn { bottom: 18px; right: 18px; width: 46px; height: 46px; }
+      .welcome-card { padding: 44px 28px; }
     }
   </style>
 </head>
 <body>
 
-<div class="petal-layer" id="petals"></div>
+<!-- ══ WELCOME OVERLAY ══ -->
+<div id="welcome-overlay">
+  <div class="welcome-card">
+    <p class="wc-label">Thiệp mời cưới</p>
+    <div class="wc-names">
+      Hồng Phong
+      <span class="wc-amp">&amp;</span>
+      Hà Thu
+    </div>
+    <p class="wc-date">❤  24 · 04 · 2026  ❤</p>
+    <div class="wc-line"></div>
+    <button id="btn-enter">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+      </svg>
+      Mở thiệp &amp; nghe nhạc
+    </button>
+    <p class="wc-hint">Nhấn để vào xem thiệp cưới</p>
+  </div>
+</div>
 
-<!-- ══ MUSIC PLAYER ══ -->
-<!--
-  ĐẶT FILE NHẠC:
-  Tải bài "Một Nhà – Da LAB" về máy, đặt tên file là: nhac-nen.mp3
-  Sau đó để file đó cùng thư mục với file HTML này.
--->
+<!-- ══ AUDIO ══ -->
 <audio id="bgMusic" loop preload="auto">
   <source src="motnha.mp3" type="audio/mpeg">
 </audio>
 
-<button id="music-btn" data-tip="Tắt nhạc" onclick="toggleMusic()" title="Bật / Tắt nhạc nền" aria-label="Bật tắt nhạc nền">
-  <!-- Icon nốt nhạc khi đang phát -->
-  <svg id="icon-on" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+<div class="petal-layer" id="petals"></div>
+
+<!-- ══ MUSIC TOGGLE ══ -->
+<button id="music-btn" data-tip="Tắt nhạc" onclick="toggleMusic()" title="Bật / Tắt nhạc" aria-label="Bật tắt nhạc nền">
+  <svg id="icon-on" viewBox="0 0 24 24" fill="none" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
   </svg>
-  <!-- Icon tắt tiếng khi đang dừng -->
-  <svg id="icon-off" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;">
-    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.45"/>
-    <line x1="3" y1="3" x2="21" y2="21" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round"/>
+  <svg id="icon-off" viewBox="0 0 24 24" fill="none" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" opacity="0.4"/>
+    <line x1="3" y1="3" x2="21" y2="21"/>
   </svg>
 </button>
 
@@ -557,104 +618,45 @@
 </footer>
 
 <script>
-  /* ── PETALS ── */
-  const petalLayer = document.getElementById('petals');
-  for (let i = 0; i < 18; i++) {
-    const p = document.createElement('div');
-    p.className = 'petal';
-    const size = 6 + Math.random() * 10;
-    p.style.cssText = `
-      left: ${Math.random() * 100}%;
-      width: ${size}px;
-      height: ${size * 1.4}px;
-      animation-duration: ${6 + Math.random() * 10}s;
-      animation-delay: ${Math.random() * 12}s;
-      opacity: ${0.3 + Math.random() * 0.5};
-      transform: rotate(${Math.random() * 360}deg);
-    `;
-    const colors = ['#e8c4c4','#d4a0a0','#c9a08c','#e0c8b0','#d4b4b4'];
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
-    petalLayer.appendChild(p);
-  }
-
-  /* ── COUNTDOWN ── */
-  const target = new Date('2026-04-24T11:00:00');
-  function tick() {
-    const now = new Date();
-    const diff = target - now;
-    if (diff <= 0) {
-      document.querySelectorAll('.cd-num').forEach(el => el.textContent = '00');
-      return;
-    }
-    const d = Math.floor(diff / 86400000);
-    const h = Math.floor((diff % 86400000) / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-    document.getElementById('cd-d').textContent = String(d).padStart(2,'0');
-    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
-    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
-    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
-  }
-  tick();
-  setInterval(tick, 1000);
-
-  /* ── SCROLL REVEAL ── */
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  /* ── GALLERY DRAG TO SCROLL ── */
-  const wrap = document.getElementById('galleryWrap');
-  let isDown = false, startX, scrollLeft;
-  wrap.addEventListener('mousedown', e => {
-    isDown = true;
-    wrap.style.cursor = 'grabbing';
-    startX = e.pageX - wrap.offsetLeft;
-    scrollLeft = wrap.scrollLeft;
-  });
-  window.addEventListener('mouseup', () => {
-    isDown = false;
-    wrap.style.cursor = 'grab';
-  });
-  wrap.addEventListener('mousemove', e => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - wrap.offsetLeft;
-    wrap.scrollLeft = scrollLeft - (x - startX);
-  });
-
-  /* ── RSVP SUBMIT ── */
-  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    this.style.display = 'none';
-    document.getElementById('rsvpSuccess').classList.add('show');
-  });
-
-  /* ── MUSIC PLAYER ── */
-  const audio     = document.getElementById('bgMusic');
-  const btn       = document.getElementById('music-btn');
-  const iconOn    = document.getElementById('icon-on');
-  const iconOff   = document.getElementById('icon-off');
-  let playing     = false;
-  let started     = false;
+  const audio   = document.getElementById('bgMusic');
+  const overlay = document.getElementById('welcome-overlay');
+  const musicBtn = document.getElementById('music-btn');
+  const iconOn  = document.getElementById('icon-on');
+  const iconOff = document.getElementById('icon-off');
+  let playing   = false;
 
   audio.volume = 0.4;
+
+  /* ── ENTER: gọi audio.play() trực tiếp trong handler của click ── */
+  document.getElementById('btn-enter').addEventListener('click', function () {
+    /* play() phải được gọi ĐỒNG BỘ trong event handler — không qua setTimeout, Promise chain, hay wrapper */
+    var playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(function () {
+        setPlayingUI(true);
+      }).catch(function () {
+        setPlayingUI(false);
+      });
+    }
+
+    /* Ẩn overlay */
+    overlay.classList.add('hiding');
+    setTimeout(function () { overlay.style.display = 'none'; }, 800);
+  });
 
   function setPlayingUI(on) {
     playing = on;
     if (on) {
       iconOn.style.display  = 'block';
       iconOff.style.display = 'none';
-      btn.setAttribute('data-tip', 'Tắt nhạc');
-      btn.classList.add('spinning');
+      musicBtn.setAttribute('data-tip', 'Tắt nhạc');
+      musicBtn.classList.add('spinning');
     } else {
       iconOn.style.display  = 'none';
       iconOff.style.display = 'block';
-      btn.setAttribute('data-tip', 'Bật nhạc');
-      btn.classList.remove('spinning');
+      musicBtn.setAttribute('data-tip', 'Bật nhạc');
+      musicBtn.classList.remove('spinning');
     }
   }
 
@@ -663,31 +665,56 @@
       audio.pause();
       setPlayingUI(false);
     } else {
-      audio.play().catch(() => {});
+      audio.play().catch(function () {});
       setPlayingUI(true);
     }
   }
 
-  /* Tự động phát khi người dùng tương tác lần đầu tiên với trang */
-  function autoStart(e) {
-    if (started) return;
-    if (e.target instanceof Element && e.target.closest('#music-btn')) return;
-    started = true;
-    audio.play().then(() => {
-      setPlayingUI(true);
-    }).catch(() => {
-      setPlayingUI(true);
-    });
-    document.removeEventListener('click',      autoStart);
-    document.removeEventListener('touchstart', autoStart);
-    document.removeEventListener('keydown',    autoStart);
-    document.removeEventListener('scroll',     autoStart);
+  /* ── PETALS ── */
+  var petalLayer = document.getElementById('petals');
+  for (var i = 0; i < 18; i++) {
+    var p = document.createElement('div');
+    p.className = 'petal';
+    var size = 6 + Math.random() * 10;
+    p.style.cssText = 'left:' + (Math.random()*100) + '%;width:' + size + 'px;height:' + (size*1.4) + 'px;animation-duration:' + (6+Math.random()*10) + 's;animation-delay:' + (Math.random()*12) + 's;';
+    var colors = ['#e8c4c4','#d4a0a0','#c9a08c','#e0c8b0','#d4b4b4'];
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    petalLayer.appendChild(p);
   }
 
-  document.addEventListener('click',      autoStart, { passive: true });
-  document.addEventListener('touchstart', autoStart, { passive: true });
-  document.addEventListener('keydown',    autoStart, { passive: true });
-  document.addEventListener('scroll',     autoStart, { passive: true });
+  /* ── COUNTDOWN ── */
+  var target = new Date('2026-04-24T11:00:00');
+  function tick() {
+    var diff = target - new Date();
+    if (diff <= 0) { document.querySelectorAll('.cd-num').forEach(function(el){ el.textContent='00'; }); return; }
+    document.getElementById('cd-d').textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+    document.getElementById('cd-h').textContent = String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  }
+  tick(); setInterval(tick, 1000);
+
+  /* ── SCROLL REVEAL ── */
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(function(el){ revealObserver.observe(el); });
+
+  /* ── GALLERY DRAG ── */
+  var wrap = document.getElementById('galleryWrap');
+  var isDown = false, startX, scrollLeft;
+  wrap.addEventListener('mousedown', function(e) { isDown=true; wrap.style.cursor='grabbing'; startX=e.pageX-wrap.offsetLeft; scrollLeft=wrap.scrollLeft; });
+  window.addEventListener('mouseup', function() { isDown=false; wrap.style.cursor='grab'; });
+  wrap.addEventListener('mousemove', function(e) { if(!isDown) return; e.preventDefault(); wrap.scrollLeft=scrollLeft-(e.pageX-wrap.offsetLeft-startX); });
+
+  /* ── RSVP ── */
+  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('rsvpSuccess').classList.add('show');
+  });
 </script>
 </body>
 </html>
