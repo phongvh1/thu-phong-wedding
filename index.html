@@ -14,7 +14,15 @@
   margin-top: 40px;
   flex-wrap: wrap;
 }
-
+.qr-img {
+  width: 160px;        /* chỉnh ở đây */
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;      /* căn giữa */
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
 .qr-item {
   text-align: center;
   font-family: 'Cormorant Garamond', serif;
@@ -663,13 +671,13 @@
   </p>
   <div class="qr-wrap">
   <div class="qr-box qr-left">
-    <img src="QR_CK.jpg" alt="QR Chồng">
+    <img src="QR_CK.jpg" alt="QR Chồng" class="qr-img">
     <div class="qr-name">Hồng Phong</div>
     <div class="qr-sub">Chú rể</div>
   </div>
 
   <div class="qr-box qr-right">
-    <img src="QR_VK.jpg" alt="QR Vợ">
+    <img src="QR_VK.jpg" alt="QR Vợ" class="qr-img">
     <div class="qr-name">Hà Thu</div>
     <div class="qr-sub">Cô dâu</div>
   </div>
