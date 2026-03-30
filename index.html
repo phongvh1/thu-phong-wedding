@@ -671,13 +671,12 @@
   /* Tự động phát khi người dùng tương tác lần đầu tiên với trang */
   function autoStart(e) {
     if (started) return;
-    /* Bỏ qua nếu click chính là nút nhạc (toggleMusic sẽ xử lý) */
     if (e.target instanceof Element && e.target.closest('#music-btn')) return;
     started = true;
     audio.play().then(() => {
       setPlayingUI(true);
     }).catch(() => {
-      /* Trình duyệt từ chối – giữ icon tắt, người dùng bấm nút để bật thủ công */
+      setPlayingUI(true);
     });
     document.removeEventListener('click',      autoStart);
     document.removeEventListener('touchstart', autoStart);
