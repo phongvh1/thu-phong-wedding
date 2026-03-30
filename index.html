@@ -231,14 +231,13 @@
     .gallery-item:nth-child(even)       { transform: translateY(12px); }
     .gallery-item:nth-child(odd):hover  { transform: translateY(-20px); box-shadow: 0 20px 44px rgba(44,33,22,0.2); }
     .gallery-item:nth-child(even):hover { transform: translateY(4px);   box-shadow: 0 20px 44px rgba(44,33,22,0.2); }
-    /* ẢNH: lấp đầy khung, không méo, không bị cắt sai */
     .gallery-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover;        /* giữ tỉ lệ gốc, cắt vừa khung */
-      object-position: center;  /* căn giữa */
+      object-fit: cover;
+      object-position: center;
       display: block;
-      pointer-events: none;     /* không cản kéo chuột */
+      pointer-events: none;
       transition: transform 0.5s ease;
     }
     .gallery-item:hover img { transform: scale(1.06); }
@@ -290,6 +289,60 @@
     .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
+    /* ── MUSIC BUTTON ── */
+    #music-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 9999;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(184,151,90,0.45);
+      transition: box-shadow 0.3s;
+      border: none;
+      outline: none;
+    }
+    #music-btn:hover {
+      box-shadow: 0 6px 30px rgba(184,151,90,0.65);
+    }
+    #music-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #fdf8f0;
+      transition: opacity 0.3s;
+    }
+    #music-btn.spinning {
+      animation: spinBtn 8s linear infinite;
+    }
+    @keyframes spinBtn {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    /* Tooltip */
+    #music-btn::after {
+      content: attr(data-tip);
+      position: absolute;
+      right: 60px;
+      background: rgba(44,33,22,0.82);
+      color: #fdf8f0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      padding: 6px 12px;
+      border-radius: 3px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    #music-btn:hover::after { opacity: 1; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       .rsvp-box { padding: 36px 24px; }
@@ -302,12 +355,35 @@
       .tl-item:nth-child(even) .tl-content { grid-column: 2; grid-row: 1; text-align: left; }
       .tl-item:nth-child(odd) .tl-empty,
       .tl-item:nth-child(even) .tl-empty   { display: none; }
+      #music-btn { bottom: 18px; right: 18px; width: 46px; height: 46px; }
     }
   </style>
 </head>
 <body>
 
 <div class="petal-layer" id="petals"></div>
+
+<!-- ══ MUSIC PLAYER ══ -->
+<!--
+  ĐẶT FILE NHẠC:
+  Tải bài "Một Nhà – Da LAB" về máy, đặt tên file là: nhac-nen.mp3
+  Sau đó để file đó cùng thư mục với file HTML này.
+-->
+<audio id="bgMusic" loop preload="auto">
+  <source src="motnha.mp3" type="audio/mpeg">
+</audio>
+
+<button id="music-btn" data-tip="Tắt nhạc" onclick="toggleMusic()" title="Bật / Tắt nhạc nền" aria-label="Bật tắt nhạc nền">
+  <!-- Icon nốt nhạc khi đang phát -->
+  <svg id="icon-on" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+  <!-- Icon tắt tiếng khi đang dừng -->
+  <svg id="icon-off" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <path d="M9 18V6l12-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.45"/>
+    <line x1="3" y1="3" x2="21" y2="21" stroke="#fdf8f0" stroke-width="1.8" stroke-linecap="round"/>
+  </svg>
+</button>
 
 <!-- ══ HERO ══ -->
 <div class="hero">
@@ -556,6 +632,63 @@
     this.style.display = 'none';
     document.getElementById('rsvpSuccess').classList.add('show');
   });
+
+  /* ── MUSIC PLAYER ── */
+  const audio     = document.getElementById('bgMusic');
+  const btn       = document.getElementById('music-btn');
+  const iconOn    = document.getElementById('icon-on');
+  const iconOff   = document.getElementById('icon-off');
+  let playing     = false;
+  let started     = false;
+
+  audio.volume = 0.4;
+
+  function setPlayingUI(on) {
+    playing = on;
+    if (on) {
+      iconOn.style.display  = 'block';
+      iconOff.style.display = 'none';
+      btn.setAttribute('data-tip', 'Tắt nhạc');
+      btn.classList.add('spinning');
+    } else {
+      iconOn.style.display  = 'none';
+      iconOff.style.display = 'block';
+      btn.setAttribute('data-tip', 'Bật nhạc');
+      btn.classList.remove('spinning');
+    }
+  }
+
+  function toggleMusic() {
+    if (playing) {
+      audio.pause();
+      setPlayingUI(false);
+    } else {
+      audio.play().catch(() => {});
+      setPlayingUI(true);
+    }
+  }
+
+  /* Tự động phát khi người dùng tương tác lần đầu tiên với trang */
+  function autoStart(e) {
+    if (started) return;
+    /* Bỏ qua nếu click chính là nút nhạc (toggleMusic sẽ xử lý) */
+    if (e.target.closest('#music-btn')) return;
+    started = true;
+    audio.play().then(() => {
+      setPlayingUI(true);
+    }).catch(() => {
+      /* Trình duyệt từ chối – giữ icon tắt, người dùng bấm nút để bật thủ công */
+    });
+    document.removeEventListener('click',      autoStart);
+    document.removeEventListener('touchstart', autoStart);
+    document.removeEventListener('keydown',    autoStart);
+    document.removeEventListener('scroll',     autoStart);
+  }
+
+  document.addEventListener('click',      autoStart, { passive: true });
+  document.addEventListener('touchstart', autoStart, { passive: true });
+  document.addEventListener('keydown',    autoStart, { passive: true });
+  document.addEventListener('scroll',     autoStart, { passive: true });
 </script>
 </body>
 </html>
