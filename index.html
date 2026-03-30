@@ -6,6 +6,51 @@
   <title>Thiệp Mời Cưới – Hà Thu & Hồng Phong</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital,wght@0,400;1,400&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet" />
   <style>
+    /* ══ QR CODE ══ */
+.qr-wrap {
+  position: fixed;
+  bottom: 100px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.qr-box {
+  position: absolute;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--text);
+}
+
+.qr-box img {
+  width: 95px;
+  background: white;
+  padding: 6px;
+  border-radius: 6px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.qr-left {
+  left: 30px;
+}
+
+.qr-right {
+  right: 30px;
+}
+
+.qr-name {
+  margin-top: 8px;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  color: var(--deep);
+}
+
+.qr-sub {
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+}
     :root {
       --cream: #fdf8f0;
       --gold: #b8975a;
@@ -402,7 +447,30 @@
       .tl-item:nth-child(even) .tl-empty   { display: none; }
       #music-btn { bottom: 18px; right: 18px; width: 46px; height: 46px; }
       .welcome-card { padding: 44px 28px; }
+       .qr-box img {
+    width: 70px;
+  }
+
+  .qr-name {
+    font-size: 12px;
+  }
+
+  .qr-sub {
+    font-size: 10px;
+  }
+
+  .qr-left {
+    left: 10px;
+  }
+
+  .qr-right {
+    right: 10px;
+  }
     }
+    .qr-box img {
+  filter: contrast(110%);
+  box-shadow: 0 0 12px rgba(184,151,90,0.4);
+}
   </style>
 </head>
 <body>
@@ -716,5 +784,18 @@
     document.getElementById('rsvpSuccess').classList.add('show');
   });
 </script>
+  <div class="qr-wrap">
+  <div class="qr-box qr-left">
+    <img src="QR_CK.jpg" alt="QR Chồng">
+    <div class="qr-name">Hồng Phong</div>
+    <div class="qr-sub">Chú rể</div>
+  </div>
+
+  <div class="qr-box qr-right">
+    <img src="QR_VK.jpg" alt="QR Vợ">
+    <div class="qr-name">Hà Thu</div>
+    <div class="qr-sub">Cô dâu</div>
+  </div>
+</div>
 </body>
 </html>
