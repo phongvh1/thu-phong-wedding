@@ -454,7 +454,32 @@
 
  
     }
-
+    /* modal nền tối */
+    #qrModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+    }
+    
+    /* ảnh phóng to */
+    #qrModal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      animation: zoomIn 0.3s ease;
+    }
+    
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -671,13 +696,13 @@
   </p>
   <div class="qr-wrap">
   <div class="qr-box qr-left">
-    <img src="QR_CK.jpg" alt="QR Chồng" class="qr-img">
+    <img src="QR_CK.jpg" alt="QR Chồng" class="qr-img" onclick="openQR(this.src)">
     <div class="qr-name">Hồng Phong</div>
     <div class="qr-sub">Chú rể</div>
   </div>
 
   <div class="qr-box qr-right">
-    <img src="QR_VK.jpg" alt="QR Vợ" class="qr-img">
+    <img src="QR_VK.jpg" alt="QR Vợ" class="qr-img" onclick="openQR(this.src)">
     <div class="qr-name">Hà Thu</div>
     <div class="qr-sub">Cô dâu</div>
   </div>
@@ -783,7 +808,22 @@
     this.style.display = 'none';
     document.getElementById('rsvpSuccess').classList.add('show');
   });
-</script>
  
+function openQR(src) {
+  const modal = document.getElementById('qrModal');
+  const img = document.getElementById('qrModalImg');
+  img.src = src;
+  modal.style.display = 'flex';
+}
+
+function closeQR() {
+  document.getElementById('qrModal').style.display = 'none';
+}
+
+</script>
+ <div id="qrModal" onclick="closeQR()">
+  <img id="qrModalImg">
+</div>
+
 </body>
 </html>
