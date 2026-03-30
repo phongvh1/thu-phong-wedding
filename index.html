@@ -672,7 +672,7 @@
   function autoStart(e) {
     if (started) return;
     /* Bỏ qua nếu click chính là nút nhạc (toggleMusic sẽ xử lý) */
-    if (e.target.closest('#music-btn')) return;
+    if (e.target instanceof Element && e.target.closest('#music-btn')) return;
     started = true;
     audio.play().then(() => {
       setPlayingUI(true);
