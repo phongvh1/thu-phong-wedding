@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thu & Phong Wedding</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background: #fff;
+  color: #333;
+  text-align: center;
+}
+
+section {
+  padding: 80px 20px;
+}
+
+h1, h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: linear-gradient(to bottom, #ffffff, #f7f7f7);
+}
+
+.hero h1 {
+  font-size: 50px;
+  letter-spacing: 3px;
+}
+
+.date {
+  margin-top: 10px;
+  font-size: 20px;
+}
+
+.divider {
+  width: 60px;
+  height: 2px;
+  background: gold;
+  margin: 20px auto;
+}
+
+.info {
+  background: #fafafa;
+}
+
+.footer {
+  background: #111;
+  color: white;
+}
+
+.fade {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: 1s;
+}
+
+.fade.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero fade">
+  <h1>Thu & Phong</h1>
+  <div class="divider"></div>
+  <p class="date">23 - 24 / 04 / 2026</p>
+  <p>Trân trọng kính mời bạn đến tham dự lễ thành hôn của chúng tôi</p>
+</section>
+
+<section class="fade">
+  <h2>Chúng tôi sắp kết hôn 💍</h2>
+  <div class="divider"></div>
+  <p>Sau hành trình yêu thương, chúng tôi quyết định cùng nhau bước sang chặng đường mới.</p>
+</section>
+
+<section class="info fade">
+  <h2>Thông tin lễ cưới</h2>
+  <div class="divider"></div>
+  <p><b>Nhà trai:</b> Xã Quang Hưng, Ninh Bình</p>
+  <p><b>Nhà gái:</b> Hà Nội</p>
+</section>
+
+<section class="fade">
+  <h2>Trân trọng kính mời</h2>
+  <div class="divider"></div>
+  <p>Sự hiện diện của bạn là niềm vinh hạnh lớn nhất của chúng tôi 🤍</p>
+</section>
+
+<section class="footer">
+  <h2>Thu & Phong</h2>
+  <p>Thank you 🤍</p>
+</section>
+
+<script>
+const fades = document.querySelectorAll('.fade');
+
+window.addEventListener('scroll', () => {
+  fades.forEach(f => {
+    const top = f.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      f.classList.add('show');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
