@@ -114,10 +114,7 @@
       pointer-events: none;
     }
 
-    /* make all zoomable images show cursor pointer */
-    .zoomable {
-      cursor: zoom-in !important;
-    }
+    .zoomable { cursor: zoom-in !important; }
 
     /* ══ WELCOME OVERLAY ══ */
     #welcome-overlay {
@@ -298,24 +295,57 @@
     .ornament-divider::after { background: linear-gradient(to left, transparent, var(--gold-light)); }
     .ornament-divider span { font-size: 18px; color: var(--burgundy); font-family: 'Cormorant Garamond', serif; }
 
-    /* ══ PHOTO MOSAIC ══ */
-    .photo-mosaic,
-    .photo-mosaic-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr; /* PC: 2 cột */
-      gap: 10px;
+    /* ══ PHOTO DUO ══ */
+    .photo-duo-wrap {
       max-width: 960px;
       margin: 0 auto;
-      padding: 0 20px;
+      padding: 0 20px 12px;
     }
-    .mosaic-item { overflow: hidden; border-radius: 6px; background: var(--blush); box-shadow: 0 6px 24px rgba(44,33,22,0.12); transition: transform 0.35s ease, box-shadow 0.35s ease; cursor: zoom-in; }
-    .mosaic-item:hover { transform: scale(1.02); box-shadow: 0 12px 36px rgba(44,33,22,0.22); }
-    .mosaic-item img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.5s ease; }
-    .mosaic-item:hover img { transform: scale(1.06); }
-    .mosaic-item .ph { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 48px; background: linear-gradient(135deg, var(--pink), var(--blush)); }
-    .mosaic-item--big { grid-row: span 2; }
-    .mosaic-item--wide { grid-column: span 2; }
-    /* ══ PHOTO STRIP ══ */
+    .photo-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .photo-duo-item {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--blush);
+      box-shadow: 0 8px 32px rgba(44,33,22,0.14);
+      cursor: zoom-in;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .photo-duo-item:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 24px 60px rgba(139,26,47,0.22);
+    }
+    .photo-duo-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+      transition: transform 0.55s ease;
+    }
+    .photo-duo-item:hover img { transform: scale(1.07); }
+    .photo-duo-item .ph {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px;
+    }
+    .photo-duo-item .duo-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(26,10,16,0.55) 0%, transparent 100%);
+      padding: 32px 20px 18px;
+      text-align: center;
+      opacity: 0; transition: opacity 0.35s ease;
+    }
+    .photo-duo-item:hover .duo-overlay { opacity: 1; }
+    .duo-overlay span {
+      font-family: 'Dancing Script', cursive;
+      font-size: 20px; color: white;
+    }
+
+    /* ══ HORIZONTAL GALLERY STRIP ══ */
     .gallery-wrap { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 20px 40px 48px; cursor: grab; user-select: none; }
     .gallery-wrap:active { cursor: grabbing; }
     .gallery-wrap::-webkit-scrollbar { display: none; }
@@ -333,7 +363,6 @@
     .gallery-item:nth-child(3) .ph { background: linear-gradient(135deg, #c9a0a0, #b87a7a); }
     .gallery-item:nth-child(4) .ph { background: linear-gradient(135deg, #b8975a, #8a6b35); }
     .gallery-item:nth-child(5) .ph { background: linear-gradient(135deg, #e8d5c4, #d4b483); }
-    .gallery-item:nth-child(6) .ph { background: linear-gradient(135deg, #f5c6d0, #c24d68); }
 
     .gallery-item-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(26,10,16,0.7) 0%, transparent 100%); padding: 20px 12px 10px; text-align: center; pointer-events: none; transform: translateY(10px); opacity: 0; transition: all 0.35s ease; }
     .gallery-item:hover .gallery-item-label { transform: translateY(0); opacity: 1; }
@@ -453,11 +482,8 @@
       .couple-half { height: 360px; }
       .couple-divider { display: none; }
       .couple-heart { display: none; }
-      .photo-mosaic,
-      .photo-mosaic-2 {
-        grid-template-columns: 1fr; /* Mobile: 1 cột */
-      }
-      .mosaic-item--big { grid-row: span 1; }      
+      .photo-duo { grid-template-columns: 1fr; }
+      .photo-duo-item { height: 340px; }
       .polaroid { width: 160px; }
       .polaroid-img, .polaroid-ph { height: 140px; }
       .rsvp-box { padding: 36px 20px; }
@@ -599,80 +625,52 @@
   </p>
 </section>
 
-<!-- ══ PHOTO MOSAIC ══ -->
+<!-- ══ PHOTO DUO ══ -->
 <div class="reveal" style="max-width:960px;margin:0 auto;padding:0 20px 8px">
   <p class="section-label" style="text-align:center;margin-bottom:16px">Album ảnh</p>
 </div>
-<div class="photo-mosaic reveal">
-  <div class="mosaic-item mosaic-item--big" onclick="openLightboxFromGroup('mosaic',0)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03822_uu8v0k.jpg" alt="Ảnh 1" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none">📸</div>
-  </div>
-  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',1)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573125/WIN03971_pabix0.jpg" alt="Ảnh 2" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#e8a0b0)">💕</div>
-  </div>
-  <!--<div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',2)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03626_es5z5p.jpg" alt="Ảnh 3" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#d4b483,#b8975a)">🌸</div>
-  </div>
-  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',3)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03446_byqllh.jpg" alt="Ảnh 4" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#c9a0a0,#d09090)">💍</div>
-  </div>
-  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',4)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573131/WIN03081_q8n4cm.jpg" alt="Ảnh 5" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#e8c4c4,#d4a0a0)">🥂</div>
-  </div>-->
-</div>
-<div class="photo-mosaic-2 reveal">
-  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',0)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573128/WIN02778_x0aw7t.jpg" alt="Ảnh 6" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#c24d68)">🌺</div>
-  </div>
-<!--  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',1)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573127/WIN02916_gzbvyt.jpg" alt="Ảnh 7" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#b8975a,#8a6b35)">✨</div>
-  </div>-->
-  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',2)">
-    <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573128/WIN02646_vnsy3p.jpg" alt="Ảnh 8" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-    <div class="ph" style="display:none;background:linear-gradient(135deg,#e8d5c4,#c9a08c)">🌹</div>
+<div class="photo-duo-wrap reveal">
+  <div class="photo-duo">
+    <div class="photo-duo-item" onclick="openLightboxFromGroup('duo',0)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03822_uu8v0k.jpg"
+           alt="Ảnh 1" data-caption="Khoảnh khắc đẹp"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#e8a0b0)">📸</div>
+      <div class="duo-overlay"><span>Khoảnh khắc đẹp</span></div>
+    </div>
+    <div class="photo-duo-item" onclick="openLightboxFromGroup('duo',1)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573125/WIN03971_pabix0.jpg"
+           alt="Ảnh 2" data-caption="Khoảnh khắc đẹp"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+      <div class="ph" style="display:none;background:linear-gradient(135deg,#d4b483,#b8975a)">💕</div>
+      <div class="duo-overlay"><span>Khoảnh khắc đẹp</span></div>
+    </div>
   </div>
 </div>
 
 <!-- ══ HORIZONTAL GALLERY STRIP ══ -->
 <div class="gallery-wrap reveal" id="galleryWrap">
   <div class="gallery-strip">
-   <!-- <div class="gallery-item" onclick="openLightboxFromGroup('strip',0)">
-      <img src="WIN02778.JPG" alt="Ảnh đôi 1" data-caption="Buổi sáng đầu tiên" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="ph" style="display:none">💑</div>
-      <div class="gallery-item-label"><span>Buổi sáng đầu tiên</span></div>
-    </div> -->
-    <div class="gallery-item" onclick="openLightboxFromGroup('strip',1)">
-      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04212_ol1mvw.jpg" alt="Ảnh đôi 2" data-caption="Một ngày thu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',0)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04212_ol1mvw.jpg" alt="Ảnh đôi 1" data-caption="Một ngày thu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">🌸</div>
       <div class="gallery-item-label"><span>Một ngày thu</span></div>
     </div>
-    <div class="gallery-item" onclick="openLightboxFromGroup('strip',2)">
-      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN03336_wcf9u2.jpg" alt="Ảnh đôi 3" data-caption="Cầu hôn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',1)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN03336_wcf9u2.jpg" alt="Ảnh đôi 2" data-caption="Cầu hôn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">💍</div>
       <div class="gallery-item-label"><span>Cầu hôn</span></div>
     </div>
-    <div class="gallery-item" onclick="openLightboxFromGroup('strip',3)">
-      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04208_wyo8uv.jpg" alt="Ảnh đôi 4" data-caption="Mãi bên nhau" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',2)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04208_wyo8uv.jpg" alt="Ảnh đôi 3" data-caption="Mãi bên nhau" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">❤</div>
       <div class="gallery-item-label"><span>Mãi bên nhau</span></div>
     </div>
-    <div class="gallery-item" onclick="openLightboxFromGroup('strip',4)">
-      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573124/WIN02419_rus8ix.jpg" alt="Ảnh đôi 5" data-caption="Kỷ niệm" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',3)">
+      <img src="https://res.cloudinary.com/dnxstl87n/image/upload/v1775573124/WIN02419_rus8ix.jpg" alt="Ảnh đôi 4" data-caption="Kỷ niệm" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">🥂</div>
       <div class="gallery-item-label"><span>Kỷ niệm</span></div>
     </div>
-    <!--<div class="gallery-item" onclick="openLightboxFromGroup('strip',5)">
-      <img src="WIN02645.JPG" alt="Ảnh đôi 6" data-caption="Hạnh phúc" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-      <div class="ph" style="display:none">🌹</div>
-      <div class="gallery-item-label"><span>Hạnh phúc</span></div>
-    </div> -->
   </div>
 </div>
 
@@ -829,16 +827,16 @@
   <p class="qr-scan-label">Quét QR để gửi lời chúc 💛</p>
   <div class="qr-footer">
     <div class="qr-item">
-      <img src="QR_CK.jpg" alt="QR Chú rể" 
-     onclick="openLightboxFromGroup('qr',0)" 
-     class="zoomable"/>
+      <img src="QR_CK.jpg" alt="QR Chú rể"
+           onclick="openLightboxFromGroup('qr',0)"
+           class="zoomable"/>
       <div class="qr-name">Hồng Phong</div>
       <div class="qr-sub">Chú rể</div>
     </div>
     <div class="qr-item">
-    <img src="QR_VK.jpg" alt="QR Cô dâu" 
-     onclick="openLightboxFromGroup('qr',1)" 
-     class="zoomable"/>
+      <img src="QR_VK.jpg" alt="QR Cô dâu"
+           onclick="openLightboxFromGroup('qr',1)"
+           class="zoomable"/>
       <div class="qr-name">Hà Thu</div>
       <div class="qr-sub">Cô dâu</div>
     </div>
@@ -850,25 +848,15 @@
 <script>
   /* ══ LIGHTBOX ENGINE ══ */
   var lbGroups = {
-    mosaic: [
+    duo: [
       {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03822_uu8v0k.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573125/WIN03971_pabix0.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03626_es5z5p.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573126/WIN03446_byqllh.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573131/WIN03081_q8n4cm.jpg', caption:'Khoảnh khắc đẹp'}
-    ],
-    mosaic2: [
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573128/WIN02778_x0aw7t.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573127/WIN02916_gzbvyt.jpg', caption:'Khoảnh khắc đẹp'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573128/WIN02646_vnsy3p.jpg', caption:'Khoảnh khắc đẹp'}
+      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573125/WIN03971_pabix0.jpg', caption:'Khoảnh khắc đẹp'}
     ],
     strip: [
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573128/WIN02778_x0aw7t.jpg', caption:'Buổi sáng đầu tiên'},
-      {src:'WIN02410.JPG', caption:'Một ngày thu'},
+      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04212_ol1mvw.jpg', caption:'Một ngày thu'},
       {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN03336_wcf9u2.jpg', caption:'Cầu hôn'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04212_ol1mvw.jpg', caption:'Mãi bên nhau'},
-      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04208_wyo8uv.jpg', caption:'Kỷ niệm'},
-      {src:'WIN02645.JPG', caption:'Hạnh phúc'}
+      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573130/WIN04208_wyo8uv.jpg', caption:'Mãi bên nhau'},
+      {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573124/WIN02419_rus8ix.jpg', caption:'Kỷ niệm'}
     ],
     polaroid: [
       {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573127/WIN03262_j2zyqp.jpg', caption:'Ngày đầu tiên'},
@@ -877,8 +865,8 @@
       {src:'https://res.cloudinary.com/dnxstl87n/image/upload/v1775573131/WIN03231_c0cvkp.jpg', caption:'Hạnh phúc mãi'}
     ],
     qr: [
-    {src:'QR_CK.jpg', caption:'QR Chú rể – Hồng Phong'},
-    {src:'QR_VK.jpg', caption:'QR Cô dâu – Hà Thu'}
+      {src:'QR_CK.jpg', caption:'QR Chú rể – Hồng Phong'},
+      {src:'QR_VK.jpg', caption:'QR Cô dâu – Hà Thu'}
     ]
   };
 
@@ -933,7 +921,7 @@
     if (e.key === 'ArrowLeft')   lightboxNav(-1);
   });
 
-  /* ══ ALSO: single zoomable images (hero ring photo, couple split) ══ */
+  /* single zoomable images */
   document.querySelectorAll('.zoomable').forEach(function(img) {
     img.addEventListener('click', function(e) {
       e.stopPropagation();
@@ -994,6 +982,7 @@
     pl.appendChild(p3);
   }
 
+  /* ══ COUNTDOWN ══ */
   var target = new Date('2026-04-24T11:00:00');
   function tick() {
     var diff = target - new Date();
@@ -1005,54 +994,53 @@
   }
   tick(); setInterval(tick, 1000);
 
+  /* ══ REVEAL ══ */
   var ro = new IntersectionObserver(function(entries) {
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
 
+  /* ══ GALLERY DRAG SCROLL ══ */
   var wrap = document.getElementById('galleryWrap');
   var isDown=false, startX, scrollLeft2, isDragging=false;
   wrap.addEventListener('mousedown', function(e){ isDown=true; isDragging=false; wrap.style.cursor='grabbing'; startX=e.pageX-wrap.offsetLeft; scrollLeft2=wrap.scrollLeft; });
   window.addEventListener('mouseup', function(){ isDown=false; wrap.style.cursor='grab'; setTimeout(function(){ isDragging=false; }, 50); });
-  wrap.addEventListener('mousemove', function(e){ if(!isDown)return; e.preventDefault(); var moved=Math.abs(e.pageX-wrap.offsetLeft-startX); if(moved>5) isDragging=true; wrap.scrollLeft=scrollLeft2-(e.pageX-wrap.offsetLeft-startX); });  
+  wrap.addEventListener('mousemove', function(e){ if(!isDown)return; e.preventDefault(); var moved=Math.abs(e.pageX-wrap.offsetLeft-startX); if(moved>5) isDragging=true; wrap.scrollLeft=scrollLeft2-(e.pageX-wrap.offsetLeft-startX); });
   wrap.querySelectorAll('.gallery-item').forEach(function(item){
     item.addEventListener('click', function(e){ if(isDragging){ e.stopImmediatePropagation(); } });
   });
-let lastSubmitTime = 0;
- document.getElementById('rsvpForm').addEventListener('submit', function(e){
-  e.preventDefault();
- const now = Date.now();
-  if (now - lastSubmitTime < 10000) {
-    alert("Bạn gửi nhanh quá, thử lại sau 10 giây nhé!");
-    return;
-  }
-  lastSubmitTime = now;
 
-  const name = this.querySelector('input[type="text"]').value.trim();
-  if (!name) {
-    alert("Vui lòng nhập tên!");
-    return;
-  }
-  const data = {
-    name: this.querySelector('input[type="text"]').value,
-    phone: this.querySelector('input[type="tel"]').value,
-    people: this.querySelector('select').value,
-    note: this.querySelector('textarea').value
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbwCv0dAZ3uYiJ2JFAPkvpauAzCJzS4Yu0-eIYhxs56FM15pi-M25f6Mm8BLnyh8i0J5/exec", {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    this.style.display='none';
-    document.getElementById('rsvpSuccess').classList.add('show');
-  })
-  .catch(err => {
-    alert("Gửi thất bại, thử lại nhé!");
+  /* ══ RSVP ══ */
+  let lastSubmitTime = 0;
+  document.getElementById('rsvpForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const now = Date.now();
+    if (now - lastSubmitTime < 10000) {
+      alert("Bạn gửi nhanh quá, thử lại sau 10 giây nhé!");
+      return;
+    }
+    lastSubmitTime = now;
+    const name = this.querySelector('input[type="text"]').value.trim();
+    if (!name) { alert("Vui lòng nhập tên!"); return; }
+    const data = {
+      name: this.querySelector('input[type="text"]').value,
+      phone: this.querySelector('input[type="tel"]').value,
+      people: this.querySelector('select').value,
+      note: this.querySelector('textarea').value
+    };
+    fetch("https://script.google.com/macros/s/AKfycbwCv0dAZ3uYiJ2JFAPkvpauAzCJzS4Yu0-eIYhxs56FM15pi-M25f6Mm8BLnyh8i0J5/exec", {
+      method: "POST",
+      body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => {
+      this.style.display='none';
+      document.getElementById('rsvpSuccess').classList.add('show');
+    })
+    .catch(err => {
+      alert("Gửi thất bại, thử lại nhé!");
+    });
   });
-});
 </script>
 </body>
 </html>
