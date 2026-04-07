@@ -457,9 +457,11 @@
       .couple-half { height: 360px; }
       .couple-divider { display: none; }
       .couple-heart { display: none; }
-      .photo-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; }
-      .mosaic-item--big { grid-row: span 1; }
-      .photo-mosaic-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 160px 160px; }
+      .photo-mosaic,
+      .photo-mosaic-2 {
+        grid-template-columns: 1fr; /* Mobile: 1 cột */
+      }
+      .mosaic-item--big { grid-row: span 1; }      
       .polaroid { width: 160px; }
       .polaroid-img, .polaroid-ph { height: 140px; }
       .rsvp-box { padding: 36px 20px; }
