@@ -31,6 +31,94 @@
       overflow-x: hidden;
     }
 
+    /* ══ LIGHTBOX ══ */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      background: rgba(10, 5, 8, 0.92);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+      backdrop-filter: blur(8px);
+      animation: lbFadeIn 0.25s ease;
+    }
+    #lightbox.active { display: flex; }
+    @keyframes lbFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    #lightbox-img {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+      animation: lbZoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+    }
+    @keyframes lbZoomIn {
+      from { transform: scale(0.75); opacity: 0; }
+      to   { transform: scale(1);    opacity: 1; }
+    }
+
+    #lightbox-close {
+      position: fixed;
+      top: 20px; right: 24px;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: white;
+      font-size: 20px;
+      line-height: 1;
+      transition: background 0.2s;
+      z-index: 1000000;
+    }
+    #lightbox-close:hover { background: rgba(255,255,255,0.22); }
+
+    #lightbox-prev, #lightbox-next {
+      position: fixed;
+      top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: white; font-size: 22px;
+      transition: background 0.2s;
+      z-index: 1000000;
+    }
+    #lightbox-prev { left: 16px; }
+    #lightbox-next { right: 16px; }
+    #lightbox-prev:hover, #lightbox-next:hover { background: rgba(255,255,255,0.22); }
+
+    #lightbox-caption {
+      position: fixed;
+      bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-family: 'Dancing Script', cursive;
+      font-size: 20px;
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    #lightbox-counter {
+      position: fixed;
+      bottom: 54px; left: 50%; transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px; letter-spacing: 0.3em;
+      color: rgba(255,255,255,0.35);
+      pointer-events: none;
+    }
+
+    /* make all zoomable images show cursor pointer */
+    .zoomable {
+      cursor: zoom-in !important;
+    }
+
     /* ══ WELCOME OVERLAY ══ */
     #welcome-overlay {
       position: fixed;
@@ -70,7 +158,6 @@
     .welcome-card::before { content: '✦'; position: absolute; top: 18px; left: 18px; font-size: 10px; color: var(--gold-light); opacity: 0.7; }
     .welcome-card::after  { content: '✦'; position: absolute; bottom: 18px; right: 18px; font-size: 10px; color: var(--gold-light); opacity: 0.7; }
 
-    /* tiny corner brackets */
     .wc-corner { position: absolute; width: 24px; height: 24px; }
     .wc-corner--tr { top: 10px; right: 10px; border-top: 1px solid var(--gold); border-right: 1px solid var(--gold); }
     .wc-corner--bl { bottom: 10px; left: 10px; border-bottom: 1px solid var(--gold); border-left: 1px solid var(--gold); }
@@ -113,10 +200,7 @@
         radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139,26,47,0.1) 0%, transparent 60%);
     }
 
-    /* big decorative blobs */
-    .hero-blob {
-      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; pointer-events: none;
-    }
+    .hero-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; pointer-events: none; }
     .hero-blob--1 { width: 500px; height: 500px; background: #e8a0b0; top: -100px; left: -150px; }
     .hero-blob--2 { width: 400px; height: 400px; background: #b8975a; bottom: -80px; right: -100px; }
 
@@ -129,7 +213,6 @@
 
     .hero-label { font-family: 'Cormorant Garamond', serif; font-size: clamp(11px,1.5vw,13px); letter-spacing: 0.4em; text-transform: uppercase; color: var(--burgundy); margin-bottom: 20px; opacity: 0; animation: fadeUp 1s ease 0.3s forwards; }
 
-    /* ── CIRCULAR PHOTO FRAME in Hero ── */
     .hero-photo-ring {
       position: relative; width: 180px; height: 180px; margin: 0 auto 32px;
       opacity: 0; animation: fadeUp 1.2s ease 0.4s forwards;
@@ -189,49 +272,20 @@
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
     /* ══ COUPLE PHOTO SPLIT ══ */
-    .couple-split {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0; max-width: 900px; margin: 0 auto;
-      position: relative; overflow: hidden;
-    }
-    .couple-half {
-      position: relative; height: 520px; overflow: hidden;
-    }
-    .couple-half img, .couple-half .ph {
-      width: 100%; height: 100%; object-fit: cover; object-position: center top;
-      display: block; transition: transform 0.6s ease;
-    }
-    .couple-half .ph {
-      display: flex; align-items: center; justify-content: center;
-      font-size: 64px;
-    }
+    .couple-split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 900px; margin: 0 auto; position: relative; overflow: hidden; }
+    .couple-half { position: relative; height: 520px; overflow: hidden; }
+    .couple-half img, .couple-half .ph { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform 0.6s ease; }
+    .couple-half .ph { display: flex; align-items: center; justify-content: center; font-size: 64px; }
     .couple-half:first-child .ph { background: linear-gradient(135deg, #f5c6d0, #e8a0b0); }
     .couple-half:last-child  .ph { background: linear-gradient(135deg, #d4b483, #b8975a); }
     .couple-half:hover img, .couple-half:hover .ph { transform: scale(1.04); }
-    .couple-half-overlay {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(26,10,16,0.85) 0%, transparent 100%);
-      padding: 32px 24px 24px;
-      text-align: center;
-    }
+    .couple-half-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(26,10,16,0.85) 0%, transparent 100%); padding: 32px 24px 24px; text-align: center; }
     .couple-half-name { font-family: 'Dancing Script', cursive; font-size: 34px; font-weight: 600; color: white; display: block; }
     .couple-half-role { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 4px; display: block; }
     .couple-half:first-child .couple-half-name { text-shadow: 0 2px 20px rgba(194,77,104,0.6); }
     .couple-half:last-child  .couple-half-name { text-shadow: 0 2px 20px rgba(184,151,90,0.6); }
-
-    .couple-divider {
-      position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 3px; background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--burgundy) 70%, transparent);
-      z-index: 10;
-    }
-    .couple-heart {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-      z-index: 11; width: 52px; height: 52px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--burgundy), #c24d68);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px;
-      box-shadow: 0 0 0 6px rgba(253,248,240,0.9), 0 8px 24px rgba(139,26,47,0.4);
-    }
+    .couple-divider { position: absolute; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: 3px; background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--burgundy) 70%, transparent); z-index: 10; }
+    .couple-heart { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 11; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--burgundy), #c24d68); display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 0 0 6px rgba(253,248,240,0.9), 0 8px 24px rgba(139,26,47,0.4); }
 
     /* ══ SECTIONS ══ */
     section { position: relative; z-index: 1; padding: 80px 20px; max-width: 760px; margin: 0 auto; text-align: center; }
@@ -245,21 +299,8 @@
     .ornament-divider span { font-size: 18px; color: var(--burgundy); font-family: 'Cormorant Garamond', serif; }
 
     /* ══ PHOTO MOSAIC ══ */
-    .photo-mosaic {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      grid-template-rows: 260px 260px;
-      gap: 8px;
-      max-width: 960px; margin: 0 auto 8px;
-      padding: 0 20px;
-    }
-    .mosaic-item {
-      overflow: hidden; border-radius: 6px;
-      background: var(--blush);
-      box-shadow: 0 6px 24px rgba(44,33,22,0.12);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-      cursor: pointer;
-    }
+    .photo-mosaic { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 260px 260px; gap: 8px; max-width: 960px; margin: 0 auto 8px; padding: 0 20px; }
+    .mosaic-item { overflow: hidden; border-radius: 6px; background: var(--blush); box-shadow: 0 6px 24px rgba(44,33,22,0.12); transition: transform 0.35s ease, box-shadow 0.35s ease; cursor: zoom-in; }
     .mosaic-item:hover { transform: scale(1.02); box-shadow: 0 12px 36px rgba(44,33,22,0.22); }
     .mosaic-item img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.5s ease; }
     .mosaic-item:hover img { transform: scale(1.06); }
@@ -267,30 +308,14 @@
     .mosaic-item--big { grid-row: span 2; }
     .mosaic-item--wide { grid-column: span 2; }
 
-    /* Second mosaic row (3-column even) */
-    .photo-mosaic-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-template-rows: 220px;
-      gap: 8px;
-      max-width: 960px; margin: 0 auto;
-      padding: 0 20px 8px;
-    }
+    .photo-mosaic-2 { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 220px; gap: 8px; max-width: 960px; margin: 0 auto; padding: 0 20px 8px; }
 
-    /* ══ PHOTO STRIP (horizontal scroll) ══ */
-    .gallery-wrap {
-      overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
-      padding: 20px 40px 48px; cursor: grab; user-select: none;
-    }
+    /* ══ PHOTO STRIP ══ */
+    .gallery-wrap { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 20px 40px 48px; cursor: grab; user-select: none; }
     .gallery-wrap:active { cursor: grabbing; }
     .gallery-wrap::-webkit-scrollbar { display: none; }
     .gallery-strip { display: flex; gap: 16px; width: max-content; align-items: center; }
-    .gallery-item {
-      flex: 0 0 240px; height: 320px; border-radius: 8px; overflow: hidden;
-      background: var(--blush); box-shadow: 0 8px 28px rgba(44,33,22,0.13);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-      position: relative;
-    }
+    .gallery-item { flex: 0 0 240px; height: 320px; border-radius: 8px; overflow: hidden; background: var(--blush); box-shadow: 0 8px 28px rgba(44,33,22,0.13); transition: transform 0.35s ease, box-shadow 0.35s ease; position: relative; cursor: zoom-in; }
     .gallery-item:nth-child(odd)  { transform: translateY(-14px); }
     .gallery-item:nth-child(even) { transform: translateY(14px); }
     .gallery-item:nth-child(odd):hover  { transform: translateY(-22px); box-shadow: 0 20px 44px rgba(139,26,47,0.2); }
@@ -305,27 +330,15 @@
     .gallery-item:nth-child(5) .ph { background: linear-gradient(135deg, #e8d5c4, #d4b483); }
     .gallery-item:nth-child(6) .ph { background: linear-gradient(135deg, #f5c6d0, #c24d68); }
 
-    /* gallery label overlay */
-    .gallery-item-label {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      background: linear-gradient(to top, rgba(26,10,16,0.7) 0%, transparent 100%);
-      padding: 20px 12px 10px;
-      text-align: center; pointer-events: none;
-      transform: translateY(10px); opacity: 0; transition: all 0.35s ease;
-    }
+    .gallery-item-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(26,10,16,0.7) 0%, transparent 100%); padding: 20px 12px 10px; text-align: center; pointer-events: none; transform: translateY(10px); opacity: 0; transition: all 0.35s ease; }
     .gallery-item:hover .gallery-item-label { transform: translateY(0); opacity: 1; }
     .gallery-item-label span { font-family: 'Dancing Script', cursive; font-size: 18px; color: white; }
 
-    /* ══ POLAROID SECTION ══ */
+    /* ══ POLAROID ══ */
     .polaroid-section { padding: 60px 20px; background: linear-gradient(135deg, #f8e8e0 0%, #fdf8f0 50%, #f0e8f0 100%); position: relative; overflow: hidden; }
     .polaroid-section::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Ccircle cx='30' cy='30' r='1' fill='%23b8975a' opacity='0.12'/%3E%3C/svg%3E") repeat; }
     .polaroid-row { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; }
-    .polaroid {
-      background: white; padding: 12px 12px 44px;
-      box-shadow: 0 8px 32px rgba(44,33,22,0.15);
-      width: 200px; position: relative;
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
+    .polaroid { background: white; padding: 12px 12px 44px; box-shadow: 0 8px 32px rgba(44,33,22,0.15); width: 200px; position: relative; transition: transform 0.4s ease, box-shadow 0.4s ease; cursor: zoom-in; }
     .polaroid:nth-child(1) { transform: rotate(-4deg); }
     .polaroid:nth-child(2) { transform: rotate(2deg) translateY(-20px); }
     .polaroid:nth-child(3) { transform: rotate(-2deg); }
@@ -340,15 +353,8 @@
     .polaroid-caption { position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-family: 'Dancing Script', cursive; font-size: 17px; color: var(--text-soft); }
 
     /* ══ DATE HIGHLIGHT ══ */
-    .date-hero {
-      background: linear-gradient(135deg, var(--burgundy) 0%, #a02040 50%, #8b1a2f 100%);
-      padding: 80px 20px; text-align: center; position: relative; overflow: hidden;
-    }
-    .date-hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='%23ffffff' opacity='0.07'/%3E%3C/svg%3E") repeat;
-    }
+    .date-hero { background: linear-gradient(135deg, var(--burgundy) 0%, #a02040 50%, #8b1a2f 100%); padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+    .date-hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='40' cy='40' r='1.5' fill='%23ffffff' opacity='0.07'/%3E%3C/svg%3E") repeat; }
     .date-hero-label { font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.5em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
     .date-hero-big { font-family: 'Cormorant Garamond', serif; font-size: clamp(80px, 15vw, 160px); font-weight: 300; color: rgba(255,255,255,0.12); line-height: 1; display: block; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 100%; text-align: center; pointer-events: none; }
     .date-hero-content { position: relative; z-index: 1; }
@@ -435,15 +441,6 @@
     .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.9s ease, transform 0.9s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ══ CORNER SVG ══ */
-    .corner { position: absolute; width: 130px; height: 130px; opacity: 0.45; }
-    .corner svg { width: 100%; height: 100%; }
-    .corner--tl { top: 20px; left: 20px; }
-    .corner--tr { top: 20px; right: 20px; transform: scaleX(-1); }
-    .corner--bl { bottom: 20px; left: 20px; transform: scaleY(-1); }
-    .corner--br { bottom: 20px; right: 20px; transform: scale(-1); }
-
-    /* ══ QR scan label ══ */
     .qr-scan-label { margin-top: 32px; font-family: 'Cormorant Garamond', serif; font-size: 13px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--burgundy); }
 
     @media (max-width: 700px) {
@@ -458,10 +455,22 @@
       .polaroid-img, .polaroid-ph { height: 140px; }
       .rsvp-box { padding: 36px 20px; }
       #music-btn { bottom: 18px; right: 18px; width: 46px; height: 46px; }
+      #lightbox-prev { left: 6px; }
+      #lightbox-next { right: 6px; }
     }
   </style>
 </head>
 <body>
+
+<!-- ══ LIGHTBOX ══ -->
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button id="lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <button id="lightbox-next" onclick="lightboxNav(1)">›</button>
+  <div id="lightbox-counter"></div>
+  <div id="lightbox-caption"></div>
+</div>
 
 <!-- ══ WELCOME OVERLAY ══ -->
 <div id="welcome-overlay">
@@ -516,9 +525,8 @@
 
   <p class="hero-label">Trân trọng kính mời</p>
 
-  <!-- CIRCULAR HERO PHOTO -->
   <div class="hero-photo-ring">
-    <img src="WIN02566.JPG" alt="Ảnh đôi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <img src="WIN03231.JPG" alt="Ảnh đôi" class="zoomable" data-caption="Hà Thu &amp; Hồng Phong" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ring-placeholder" style="display:none">💑</div>
   </div>
 
@@ -552,7 +560,7 @@
 <!-- ══ COUPLE SPLIT PHOTO ══ -->
 <div class="couple-split reveal">
   <div class="couple-half">
-    <img src="WIN02836.JPG" alt="Cô dâu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <img src="WIN02836.JPG" alt="Cô dâu" class="zoomable" data-caption="Cô dâu – Hà Thu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#e8a0b0)">👰</div>
     <div class="couple-half-overlay">
       <span class="couple-half-name">Hà Thu</span>
@@ -562,7 +570,7 @@
   <div class="couple-divider"></div>
   <div class="couple-heart">❤</div>
   <div class="couple-half">
-    <img src="WIN02348.JPG" alt="Chú rể" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <img src="WIN02348.JPG" alt="Chú rể" class="zoomable" data-caption="Chú rể – Hồng Phong" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#d4b483,#b8975a)">🤵</div>
     <div class="couple-half-overlay">
       <span class="couple-half-name">Hồng Phong</span>
@@ -589,38 +597,38 @@
   <p class="section-label" style="text-align:center;margin-bottom:16px">Album ảnh</p>
 </div>
 <div class="photo-mosaic reveal">
-  <div class="mosaic-item mosaic-item--big">
-    <img src="WIN03822.JPG" alt="Ảnh 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item mosaic-item--big" onclick="openLightboxFromGroup('mosaic',0)">
+    <img src="WIN03822.JPG" alt="Ảnh 1" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none">📸</div>
   </div>
-  <div class="mosaic-item">
-    <img src="WIN03971.JPG" alt="Ảnh 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',1)">
+    <img src="WIN03971.JPG" alt="Ảnh 2" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#e8a0b0)">💕</div>
   </div>
-  <div class="mosaic-item">
-    <img src="WIN03626.JPG" alt="Ảnh 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',2)">
+    <img src="WIN03626.JPG" alt="Ảnh 3" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#d4b483,#b8975a)">🌸</div>
   </div>
-  <div class="mosaic-item">
-    <img src="WIN03446.JPG" alt="Ảnh 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic',3)">
+    <img src="WIN03446.JPG" alt="Ảnh 4" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#c9a0a0,#d09090)">💍</div>
   </div>
-  <div class="mosaic-item mosaic-item--wide">
-    <img src="WIN03081.JPG" alt="Ảnh 5" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item mosaic-item--wide" onclick="openLightboxFromGroup('mosaic',4)">
+    <img src="WIN03081.JPG" alt="Ảnh 5" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#e8c4c4,#d4a0a0)">🥂</div>
   </div>
 </div>
 <div class="photo-mosaic-2 reveal">
-  <div class="mosaic-item">
-    <img src="WIN02778.JPG" alt="Ảnh 6" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',0)">
+    <img src="WIN02778.JPG" alt="Ảnh 6" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#f5c6d0,#c24d68)">🌺</div>
   </div>
-  <div class="mosaic-item">
-    <img src="WIN02916.JPG" alt="Ảnh 7" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',1)">
+    <img src="WIN02916.JPG" alt="Ảnh 7" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#b8975a,#8a6b35)">✨</div>
   </div>
-  <div class="mosaic-item">
-    <img src="WIN02646.JPG" alt="Ảnh 8" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+  <div class="mosaic-item" onclick="openLightboxFromGroup('mosaic2',2)">
+    <img src="WIN02646.JPG" alt="Ảnh 8" data-caption="Khoảnh khắc đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
     <div class="ph" style="display:none;background:linear-gradient(135deg,#e8d5c4,#c9a08c)">🌹</div>
   </div>
 </div>
@@ -628,33 +636,33 @@
 <!-- ══ HORIZONTAL GALLERY STRIP ══ -->
 <div class="gallery-wrap reveal" id="galleryWrap">
   <div class="gallery-strip">
-    <div class="gallery-item">
-      <img src="WIN02778.JPG" alt="Ảnh đôi 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',0)">
+      <img src="WIN02778.JPG" alt="Ảnh đôi 1" data-caption="Buổi sáng đầu tiên" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">💑</div>
       <div class="gallery-item-label"><span>Buổi sáng đầu tiên</span></div>
     </div>
-    <div class="gallery-item">
-      <img src="WIN02410.JPG" alt="Ảnh đôi 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',1)">
+      <img src="WIN02410.JPG" alt="Ảnh đôi 2" data-caption="Một ngày thu" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">🌸</div>
       <div class="gallery-item-label"><span>Một ngày thu</span></div>
     </div>
-    <div class="gallery-item">
-      <img src="WIN03336.JPG" alt="Ảnh đôi 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',2)">
+      <img src="WIN03336.JPG" alt="Ảnh đôi 3" data-caption="Cầu hôn" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">💍</div>
       <div class="gallery-item-label"><span>Cầu hôn</span></div>
     </div>
-    <div class="gallery-item">
-      <img src="WIN04212.JPG" alt="Ảnh đôi 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',3)">
+      <img src="WIN04212.JPG" alt="Ảnh đôi 4" data-caption="Mãi bên nhau" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">❤</div>
       <div class="gallery-item-label"><span>Mãi bên nhau</span></div>
     </div>
-    <div class="gallery-item">
-      <img src="WIN04208.JPG" alt="Ảnh đôi 5" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',4)">
+      <img src="WIN04208.JPG" alt="Ảnh đôi 5" data-caption="Kỷ niệm" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">🥂</div>
       <div class="gallery-item-label"><span>Kỷ niệm</span></div>
     </div>
-    <div class="gallery-item">
-      <img src="WIN02645.JPG" alt="Ảnh đôi 6" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="gallery-item" onclick="openLightboxFromGroup('strip',5)">
+      <img src="WIN02645.JPG" alt="Ảnh đôi 6" data-caption="Hạnh phúc" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="ph" style="display:none">🌹</div>
       <div class="gallery-item-label"><span>Hạnh phúc</span></div>
     </div>
@@ -668,23 +676,23 @@
     <h2 class="section-title">Ký ức đẹp</h2>
   </div>
   <div class="polaroid-row">
-    <div class="polaroid">
-      <img src="WIN03262.JPG" class="polaroid-img" alt="Polaroid 1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="polaroid" onclick="openLightboxFromGroup('polaroid',0)">
+      <img src="WIN03262.JPG" class="polaroid-img" alt="Polaroid 1" data-caption="Ngày đầu tiên" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="polaroid-ph polaroid-ph--1" style="display:none">👰</div>
       <div class="polaroid-caption">Ngày đầu tiên</div>
     </div>
-    <div class="polaroid">
-      <img src="WIN02778.JPG" class="polaroid-img" alt="Polaroid 2" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="polaroid" onclick="openLightboxFromGroup('polaroid',1)">
+      <img src="WIN02778.JPG" class="polaroid-img" alt="Polaroid 2" data-caption="Tình yêu đẹp" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="polaroid-ph polaroid-ph--2" style="display:none">🤵</div>
       <div class="polaroid-caption">Tình yêu đẹp</div>
     </div>
-    <div class="polaroid">
-      <img src="WIN04040.JPG" class="polaroid-img" alt="Polaroid 3" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="polaroid" onclick="openLightboxFromGroup('polaroid',2)">
+      <img src="WIN04040.JPG" class="polaroid-img" alt="Polaroid 3" data-caption="Mãi bên nhau" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="polaroid-ph polaroid-ph--3" style="display:none">💕</div>
       <div class="polaroid-caption">Mãi bên nhau</div>
     </div>
-    <div class="polaroid">
-      <img src="WIN03231.JPG" class="polaroid-img" alt="Polaroid 4" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+    <div class="polaroid" onclick="openLightboxFromGroup('polaroid',3)">
+      <img src="WIN03231.JPG" class="polaroid-img" alt="Polaroid 4" data-caption="Hạnh phúc mãi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
       <div class="polaroid-ph polaroid-ph--4" style="display:none">🌸</div>
       <div class="polaroid-caption">Hạnh phúc mãi</div>
     </div>
@@ -734,7 +742,7 @@
     </div>
     <div class="tl-item">
       <div class="tl-empty"></div><div class="tl-dot"></div>
-      <div class="tl-content"><span class="tl-time">11:00 SA</span><div class="tl-title">Lễ Đón Dâu</div><div class="tl-desc">Đoàn rước dâu về nhà trai<br>Lễ vật truyền thống</div></div>
+      <div class="tl-content"><span class="tl-time">09:00 SA</span><div class="tl-title">Lễ Đón Dâu</div><div class="tl-desc">Đoàn rước dâu về nhà trai<br>Lễ vật truyền thống</div></div>
     </div>
     <div class="tl-item">
       <div class="tl-content"><span class="tl-time">11:30 SA</span><div class="tl-title">Chụp ảnh Gia đình</div><div class="tl-desc">Ghi lại khoảnh khắc đẹp<br>cùng hai họ</div></div>
@@ -762,13 +770,16 @@
     <div class="venue-card">
       <div class="venue-icon">🌸</div>
       <h3>Nhà Trai</h3>
-      <p>Thôn Nam Ngoại Nam, Xã Quang Hưng<br>Ninh Bình, Việt Nam<br><br>Thứ năm, 23/04/2026<br>12:00 – 22:00</p>
+      <p>Thôn Nam Ngoại Nam, Xã Quang Hưng<br>Ninh Bình, Việt Nam<br><br>Thứ năm, 23/04/2026 16:00 – 22:00
+      <br>Thứ Sáu, 24/04/2026<br>11:00 – 15:00
+      </p>
       <a class="map-btn" href="https://maps.app.goo.gl/ZtbXi3rzUPj6gpMK6" target="_blank">Xem bản đồ →</a>
     </div>
     <div class="venue-card">
       <div class="venue-icon">🌸</div>
       <h3>Nhà Gái</h3>
-      <p>Thôn Hiệp Lộc 1, Xã Hát Môn<br>Hà Nội, Việt Nam<br><br>Thứ sáu, 24/04/2026<br>09:00 – 12:00</p>
+      <p>Thôn Hiệp Lộc 1, Xã Hát Môn<br>Hà Nội, Việt Nam<br><br>Thứ năm, 23/04/2026 14:00 – 22:00
+      <br>Thứ Sáu, 24/04/2026<br>07:00 – 12:00</p>
       <a class="map-btn" href="https://maps.app.goo.gl/SLeXZoL7RwuS1PKC7" target="_blank">Xem bản đồ →</a>
     </div>
   </div>
@@ -811,12 +822,16 @@
   <p class="qr-scan-label">Quét QR để gửi lời chúc 💛</p>
   <div class="qr-footer">
     <div class="qr-item">
-      <img src="QR_CK.jpg" alt="QR Chú rể"/>
+      <img src="QR_CK.jpg" alt="QR Chú rể" 
+     onclick="openLightboxFromGroup('qr',0)" 
+     class="zoomable"/>
       <div class="qr-name">Hồng Phong</div>
       <div class="qr-sub">Chú rể</div>
     </div>
     <div class="qr-item">
-      <img src="QR_VK.jpg" alt="QR Cô dâu"/>
+    <img src="QR_VK.jpg" alt="QR Cô dâu" 
+     onclick="openLightboxFromGroup('qr',1)" 
+     class="zoomable"/>
       <div class="qr-name">Hà Thu</div>
       <div class="qr-sub">Cô dâu</div>
     </div>
@@ -826,15 +841,110 @@
 </footer>
 
 <script>
-  const audio    = document.getElementById('bgMusic');
-  const overlay  = document.getElementById('welcome-overlay');
-  const musicBtn = document.getElementById('music-btn');
-  const iconOn   = document.getElementById('icon-on');
-  const iconOff  = document.getElementById('icon-off');
-  let playing    = false;
-  audio.volume   = 0.4;
+  /* ══ LIGHTBOX ENGINE ══ */
+  var lbGroups = {
+    mosaic: [
+      {src:'WIN03822.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN03971.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN03626.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN03446.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN03081.JPG', caption:'Khoảnh khắc đẹp'}
+    ],
+    mosaic2: [
+      {src:'WIN02778.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN02916.JPG', caption:'Khoảnh khắc đẹp'},
+      {src:'WIN02646.JPG', caption:'Khoảnh khắc đẹp'}
+    ],
+    strip: [
+      {src:'WIN02778.JPG', caption:'Buổi sáng đầu tiên'},
+      {src:'WIN02410.JPG', caption:'Một ngày thu'},
+      {src:'WIN03336.JPG', caption:'Cầu hôn'},
+      {src:'WIN04212.JPG', caption:'Mãi bên nhau'},
+      {src:'WIN04208.JPG', caption:'Kỷ niệm'},
+      {src:'WIN02645.JPG', caption:'Hạnh phúc'}
+    ],
+    polaroid: [
+      {src:'WIN03262.JPG', caption:'Ngày đầu tiên'},
+      {src:'WIN02778.JPG', caption:'Tình yêu đẹp'},
+      {src:'WIN04040.JPG', caption:'Mãi bên nhau'},
+      {src:'WIN03231.JPG', caption:'Hạnh phúc mãi'}
+    ],
+    qr: [
+    {src:'QR_CK.jpg', caption:'QR Chú rể – Hồng Phong'},
+    {src:'QR_VK.jpg', caption:'QR Cô dâu – Hà Thu'}
+    ]
+  };
 
-  // Overlay petals
+  var lbCurrentGroup = null;
+  var lbCurrentIdx   = 0;
+  var lb    = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  var lbCap = document.getElementById('lightbox-caption');
+  var lbCnt = document.getElementById('lightbox-counter');
+
+  function openLightboxFromGroup(group, idx) {
+    lbCurrentGroup = group;
+    lbCurrentIdx   = idx;
+    showLightboxItem();
+    lb.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLightboxItem() {
+    var item = lbGroups[lbCurrentGroup][lbCurrentIdx];
+    lbImg.style.opacity = '0';
+    lbImg.src = item.src;
+    lbImg.onload = function() { lbImg.style.transition='opacity 0.25s'; lbImg.style.opacity='1'; };
+    lbImg.onerror = function() { lbImg.style.opacity='1'; };
+    lbCap.textContent = item.caption || '';
+    var total = lbGroups[lbCurrentGroup].length;
+    lbCnt.textContent = (lbCurrentIdx + 1) + ' / ' + total;
+    document.getElementById('lightbox-prev').style.display = total <= 1 ? 'none' : 'flex';
+    document.getElementById('lightbox-next').style.display = total <= 1 ? 'none' : 'flex';
+  }
+
+  function lightboxNav(dir) {
+    var group = lbGroups[lbCurrentGroup];
+    lbCurrentIdx = (lbCurrentIdx + dir + group.length) % group.length;
+    showLightboxItem();
+  }
+
+  function closeLightbox() {
+    lb.classList.remove('active');
+    document.body.style.overflow = '';
+    lbImg.src = '';
+  }
+
+  lb.addEventListener('click', function(e) {
+    if (e.target === lb) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (!lb.classList.contains('active')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowRight')  lightboxNav(1);
+    if (e.key === 'ArrowLeft')   lightboxNav(-1);
+  });
+
+  /* ══ ALSO: single zoomable images (hero ring photo, couple split) ══ */
+  document.querySelectorAll('.zoomable').forEach(function(img) {
+    img.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var tempGroup = '__single__' + img.src;
+      lbGroups[tempGroup] = [{src: img.src, caption: img.getAttribute('data-caption') || ''}];
+      openLightboxFromGroup(tempGroup, 0);
+    });
+  });
+
+  /* ══ AUDIO ══ */
+  var audio    = document.getElementById('bgMusic');
+  var overlay  = document.getElementById('welcome-overlay');
+  var musicBtn = document.getElementById('music-btn');
+  var iconOn   = document.getElementById('icon-on');
+  var iconOff  = document.getElementById('icon-off');
+  var playing  = false;
+  audio.volume = 0.4;
+
   var op = document.getElementById('overlayPetals');
   for (var i = 0; i < 24; i++) {
     var p2 = document.createElement('div');
@@ -867,7 +977,6 @@
     else { audio.play().catch(function(){}); setPlayingUI(true); }
   }
 
-  // Body petals
   var pl = document.getElementById('petals');
   for (var j = 0; j < 20; j++) {
     var p3 = document.createElement('div');
@@ -878,7 +987,6 @@
     pl.appendChild(p3);
   }
 
-  // Countdown
   var target = new Date('2026-04-24T11:00:00');
   function tick() {
     var diff = target - new Date();
@@ -890,25 +998,43 @@
   }
   tick(); setInterval(tick, 1000);
 
-  // Scroll reveal
   var ro = new IntersectionObserver(function(entries) {
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('visible'); ro.unobserve(e.target); } });
   }, { threshold: 0.1 });
   document.querySelectorAll('.reveal').forEach(function(el){ ro.observe(el); });
 
-  // Gallery drag
   var wrap = document.getElementById('galleryWrap');
-  var isDown=false, startX, scrollLeft2;
-  wrap.addEventListener('mousedown', function(e){ isDown=true; wrap.style.cursor='grabbing'; startX=e.pageX-wrap.offsetLeft; scrollLeft2=wrap.scrollLeft; });
-  window.addEventListener('mouseup', function(){ isDown=false; wrap.style.cursor='grab'; });
-  wrap.addEventListener('mousemove', function(e){ if(!isDown)return; e.preventDefault(); wrap.scrollLeft=scrollLeft2-(e.pageX-wrap.offsetLeft-startX); });
+  var isDown=false, startX, scrollLeft2, isDragging=false;
+  wrap.addEventListener('mousedown', function(e){ isDown=true; isDragging=false; wrap.style.cursor='grabbing'; startX=e.pageX-wrap.offsetLeft; scrollLeft2=wrap.scrollLeft; });
+  window.addEventListener('mouseup', function(){ isDown=false; wrap.style.cursor='grab'; setTimeout(function(){ isDragging=false; }, 50); });
+  wrap.addEventListener('mousemove', function(e){ if(!isDown)return; e.preventDefault(); var moved=Math.abs(e.pageX-wrap.offsetLeft-startX); if(moved>5) isDragging=true; wrap.scrollLeft=scrollLeft2-(e.pageX-wrap.offsetLeft-startX); });  
+  wrap.querySelectorAll('.gallery-item').forEach(function(item){
+    item.addEventListener('click', function(e){ if(isDragging){ e.stopImmediatePropagation(); } });
+  });
 
-  // RSVP
-  document.getElementById('rsvpForm').addEventListener('submit', function(e){
-    e.preventDefault();
+ document.getElementById('rsvpForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const data = {
+    name: this.querySelector('input[type="text"]').value,
+    phone: this.querySelector('input[type="tel"]').value,
+    people: this.querySelector('select').value,
+    note: this.querySelector('textarea').value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbwCv0dAZ3uYiJ2JFAPkvpauAzCJzS4Yu0-eIYhxs56FM15pi-M25f6Mm8BLnyh8i0J5/exec", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
     this.style.display='none';
     document.getElementById('rsvpSuccess').classList.add('show');
+  })
+  .catch(err => {
+    alert("Gửi thất bại, thử lại nhé!");
   });
+});
 </script>
 </body>
 </html>
